@@ -1,11 +1,12 @@
 var moment = require("moment");
+require("dotenv").config();
 
 const mysql = require("serverless-mysql")({
   config: {
-    host: "mskmed.cseiacflig8q.us-east-1.rds.amazonaws.com",
-    database: "MSKMed",
-    user: "admin",
-    password: "kallen2020",
+    host: process.env.DB_HOST,
+    database: process.env.DB_DB,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
   },
 });
 
