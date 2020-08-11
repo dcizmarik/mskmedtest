@@ -3,6 +3,7 @@ node_js:
   - 12
 
 install:
+  - pip install awscli
   - npm install aws-sdk
   - aws configure set aws_access_key_id $AWS_ACCESS_ID
   - aws configure set aws_access_key_id $AWS_SECRET_ID
