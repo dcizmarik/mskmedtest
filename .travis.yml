@@ -2,16 +2,18 @@ language: node_js
 node_js:
   - 12
 
-deploy:
-  provider: lambda
-  access_key_id: $AWS_ACCESS_KEY
-  secret_access_key:
-    secure: "$AWS_SECRET_KEY"
-  function_name: SNStoDatabaseTravis
-  region: us-east1
-  role: RDSQueryFromLambdaRole
-  handler_name: index.handler
-  module_name: index
-  runtime: nodejs12.x
+install:
+  - npm install aws-xray-sdk
+  - aws configure set aws_access_key_id $AWS_ACCESS_ID
+  - aws configure set aws_access_key_id $AWS_SECRET_ID
+  - aws configure set default.region us-east-1
 
-  edge: true # opt in to dpl v2
+deploy:
+  - cd lambda
+  - zip -r function.zip .
+  - aws lambda update-function-code --function-name=SNStoDatabase --zip-file=fileb://function.zip --region=us-east-1
+
+env:
+  global:
+    - secure: CZstH2N3D6tziJc1VKmUlWgAAArY4xhRZiPGL7O787Vum5dVOeG7MkqOLjGCd4jTSZ/kyBFtCj1fUdzVA+EB+ZNOJnBgYrTMoJQiJzfxEzhBxe7/Mmg5xpNIkclSZTIZyoc09KSvdcLsdAEJEzehjPFwssB5I0TJw5LQe4aJJp0okxdF0A+BCUFOZTqCUfmcjHkuWvxxEDpMOwRg3sn/OpLcYNNa9t2cuCC7u+QpFm9mYmkepq/TGm0z/3gF0vmx8JKLDXSQ/YckOKZ1ap3t0TvaQlue8hqY2/zw2yKImYTzlcHreqFdv+hExu8heZiofzoHuqOu5swNZ3hi3mFnzA2TBJbTvCEnwWJInpblymx6i3KeqxbiBV82AXCqlzayG/boqO80Tmmha1cAEOTFMWjFYXAH71zIiYM2cYjKHrqLYHQRqgqujuMxt/VeLFG/mK5rfzysMwyb86rMpkIHcQ2HZZYhIIWT6gbL423TebLelNan31jIXiGvR7d/7fWZLrxuAJ8+rDopXNPLwDmsxAOmnGFGqK5pTE5MuOX5CS7wHcy9CTOjxRAEEqaqcDgBuCmkJxK4HQgFZVszNFkLi6labWbr0HaI2aPC3jMODcaA9WxpxzqWgAd6aJbY1H4s1tUnySLWUd3Yi2EqJcemBg8Htoj9LASL/IUQMUqs8fo=
+    - secure: b2sYe/W0fKL2x23f8d5qW4ZjlClOYuVovIJDLKoyTYwUAB0F6QtNE+Bx3tvIIwuUGKvKxsBJ8gAnALmrmAbJpwbfVbNkv8EGFa5ARUdbhzwN4k00wRSBDEZ8pKYrPbcT0PxFGrjxQVnr1ieR4TRdr7m8sIcnFMpJ4A4ZHnWhdh1is+kz0YQI6VKaUvylWjbo7v4QfuVt+JVphbYIBzKJARHyKkV21cXNm+AFOmp9DHC+A3CMCyW58FY0SsX2yisDvKMH3GYltYAJVWPZupzmE5bNyTqE9xk32KA1s8OtGi0OBcHg+7L8C1uFGoEPVTMFCe94Nf17ZbgooMZ66Axx2Qb3T/3uCwrHEzcosENuHiLDEfgjIGDIc3RQ62nO1pmzM4MJnwxWuSe+fzvlVPCPmcjcBqiCovF/hJy8VWczMGLoRrtxdSt392sRGwcWqKjCQ6vaHMrN7gqv0D7P8/2DimZ/oPDvaiEWOTVT4WV9JO7eQz97r3fB9M1sPLmgdzmZI1Q7fElw2avh6Jqm6JAUrwPuK0xlvghqyKfJXCfiLAccewiR5H9BxU6z226oq4BNyttdVKVgi/n6m2AcJccHPpBk7YDt+T50L2E/AxMHvhIDkgYEjo1nmKSGRDKWTDiulhrbDtZDs2xZjkgtj3bDJ7ElOKFd7F+MMumQ7/GMvjw=
