@@ -1,0 +1,13 @@
+deploy:
+  provider: lambda
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
+  function_name: SNStoDatabaseTravis
+  region: us-east1
+  role: RDSQueryFromLambdaRole
+  handler_name: index.handler
+  module_name: index
+  runtime: nodejs12.x
+
+  edge: true # opt in to dpl v2
